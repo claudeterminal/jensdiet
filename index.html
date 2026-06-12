@@ -71,7 +71,7 @@
 
   .grid{
     flex:1 1 auto;display:grid;
-    grid-template-columns:minmax(64px,.55fr) repeat(7,1fr);
+    grid-template-columns:minmax(64px,.55fr) repeat(7,1fr) minmax(70px,.62fr);
     grid-template-rows:auto repeat(7,1fr);
     gap:clamp(4px,.7vh,9px);
     min-height:0;
@@ -145,6 +145,38 @@
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
     margin-top:-2px;
   }
+  .cell .iconrow{display:flex;align-items:flex-end;justify-content:center;gap:clamp(2px,.5vw,8px);min-height:0;}
+  .cell.duo .icon{width:clamp(28px,5.8vh,52px);height:clamp(28px,5.8vh,52px);}
+  .cell .name.extra{font-size:clamp(9px,1.35vh,13px);margin-top:-2px;}
+  .endline{
+    flex:0 0 auto;height:2px;border-radius:2px;
+    background:linear-gradient(90deg, transparent, rgba(110,68,38,.9) 12%, var(--sun) 50%, rgba(110,68,38,.9) 88%, transparent);
+    box-shadow:0 0 10px rgba(232,184,75,.25);
+  }
+  .totalhead{
+    font-family:'Marcellus',serif;text-align:center;
+    letter-spacing:.18em;text-transform:uppercase;
+    font-size:clamp(10px,1.5vh,14px);color:var(--sun);
+    padding:clamp(4px,.8vh,10px) 0;
+    border-bottom:1px solid rgba(232,184,75,.45);
+    align-self:end;
+  }
+  .totalcell{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(1px,.3vh,4px);
+    border-left:2px solid rgba(110,68,38,.8);
+    padding-left:clamp(4px,.6vw,10px);
+  }
+  .totalcell .wk{
+    font-family:'Marcellus',serif;
+    font-size:clamp(11px,1.7vh,16px);color:var(--sun);
+  }
+  .totalcell .mo{
+    font-family:'Marcellus',serif;
+    font-size:clamp(11px,1.7vh,16px);
+    color:rgba(232,184,75,.5);
+  }
+  #grandtotal b{font-family:'Marcellus',serif;color:var(--sun);font-weight:400;font-size:1.25em;letter-spacing:.04em;}
   .cell.now{
     border:2px solid var(--sun);
     box-shadow:0 0 0 3px rgba(232,184,75,.18), 0 0 24px var(--glow);
@@ -197,9 +229,11 @@
 
   <div class="grid" id="grid"></div>
 
+  <div class="endline"></div>
+
   <footer>
     <span>&#x1F33F; eat slow</span>
-    <span>&#x1F375; sip first</span>
+    <span id="grandtotal"></span>
     <span><b>breathe</b> between bites</span>
   </footer>
 </div>
@@ -215,6 +249,30 @@ const shadow = `<ellipse cx="40" cy="71" rx="22" ry="4.5" fill="rgba(0,0,0,.38)"
 const wrap = inner => `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 
 const ART = {
+
+ricenoodles: wrap(`
+<defs>
+${G("rnB",S(0,"#3f8f86")+S(.55,"#2b6e66")+S(1,"#1c4f49"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("rnN",S(0,"#fffdf4")+S(.6,"#f4ecd6")+S(1,"#ddcfae"),"radial",'cx="40%" cy="30%" r="80%"')}
+</defs>
+${shadow}
+<g fill="none" stroke="url(#rnN)" stroke-linecap="round">
+<path d="M32 38 q-2.5 -5 0 -10 q2.5 -5 0 -10" stroke-width="2.6"/>
+<path d="M40 37 q2.5 -5.5 0 -11 q-2.5 -5.5 0 -11" stroke-width="2.8"/>
+<path d="M48 38 q-2.5 -5 0 -10 q2.5 -5 0 -10" stroke-width="2.6"/>
+</g>
+<path d="M18 42 q22 8 44 0 q-1 14 -9 19 q-6 4 -13 4 t-13 -4 q-8 -5 -9 -19z" fill="url(#rnB)"/>
+<path d="M20 47 q4 6 8 8" stroke="#6fbfb4" stroke-width="2" stroke-linecap="round" fill="none" opacity=".55"/>
+<ellipse cx="40" cy="42" rx="22" ry="6.4" fill="#163e39"/>
+<g fill="none" stroke="url(#rnN)" stroke-linecap="round">
+<path d="M22 42 q9 -6 18 0 q9 5 18 0" stroke-width="3"/>
+<path d="M24 40 q8 -7 16 -1 q9 5 16 -1" stroke-width="2.6"/>
+<path d="M27 38.6 q7 -5 13 -.6 q8 4 13 -.4" stroke-width="2.4"/>
+<path d="M30 37 q6 -4 11 0 q6 3 10 0" stroke-width="2.2"/>
+<path d="M33 41.5 q5 3 10 .4" stroke-width="2.4" opacity=".9"/>
+</g>
+<path d="M34 35 q3 -2 5 .4" stroke="#7cbf52" stroke-width="2" stroke-linecap="round" fill="none"/>
+`),
 
 capWhite: wrap(`
 <defs>${G("cpW",S(0,"#ffffff")+S(.6,"#efe9da")+S(1,"#cbc0a8"),"linear",'x1="0" y1="0" x2="1" y2="1"')}</defs>
@@ -251,39 +309,46 @@ ${G("cpA2",S(0,"#ffefc4")+S(1,"#e8c264"),"linear",'x1="0" y1="0" x2="1" y2="1"')
 
 water: wrap(`
 <defs>
-${G("waGl",S(0,"rgba(255,255,255,.34)")+S(.45,"rgba(220,240,250,.14)")+S(1,"rgba(160,200,220,.22)"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
-${G("waW",S(0,"rgba(190,228,245,.55)")+S(.6,"rgba(140,200,228,.7)")+S(1,"rgba(95,160,195,.8)"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
-${G("waCap",S(0,"#dfe9ee")+S(.5,"#aebfc9")+S(1,"#7e93a0"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
+${G("waGl",S(0,"rgba(255,255,255,.32)")+S(.45,"rgba(225,242,250,.12)")+S(1,"rgba(165,205,225,.2)"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
+${G("waW",S(0,"rgba(200,232,246,.5)")+S(.6,"rgba(150,205,230,.65)")+S(1,"rgba(105,165,198,.75)"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("waCap",S(0,"#e25548")+S(.5,"#c1271b")+S(1,"#8e1109"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
+${G("waLab",S(0,"#fdf9ee")+S(1,"#efe6cd"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("waHill",S(0,"#d8b977")+S(1,"#b08c4a"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
 </defs>
-<ellipse cx="40" cy="72" rx="24" ry="4" fill="rgba(0,0,0,.38)"/>
-<g transform="translate(-9 0)">
-<ellipse cx="34.5" cy="68" rx="8.2" ry="2.6" fill="rgba(255,255,255,.18)"/>
-<path d="M31 19 h7 l2.5 8 q1.5 4 1.5 9 v28 q0 6 -7.5 6 t-7.5 -6 v-28 q0 -5 1.5 -9 z"
+<ellipse cx="40" cy="73" rx="23" ry="3.8" fill="rgba(0,0,0,.38)"/>
+<g transform="translate(-10 0)">
+<ellipse cx="34.5" cy="70" rx="7.4" ry="2.2" fill="rgba(255,255,255,.16)"/>
+<rect x="31.4" y="10.5" width="6.2" height="6" rx="1.2" fill="url(#waCap)"/>
+<rect x="31.4" y="15.4" width="6.2" height="1.4" fill="#7c0e07"/>
+<path d="M32.2 16.8 h4.6 c.3 3 1.6 4.6 2.6 6.4 q1.5 2.6 1.5 6 v34.4 q0 6.4 -6.4 6.4 t-6.4 -6.4 v-34.4 q0 -3.4 1.5 -6 c1 -1.8 2.3 -3.4 2.6 -6.4z"
   fill="url(#waGl)" stroke="rgba(255,255,255,.55)" stroke-width=".9"/>
-<path d="M27.6 33 q6.9 2.6 13.8 0 v23 q0 5 -6.9 5 t-6.9 -5 z" fill="url(#waW)"/>
-<ellipse cx="34.5" cy="33.4" rx="6.9" ry="1.9" fill="rgba(225,245,252,.85)"/>
-<ellipse cx="34.5" cy="61" rx="5.4" ry="1.6" fill="rgba(255,255,255,.3)"/>
-<path d="M30 23 q-1.6 18 -1 38" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".95"/>
-<path d="M39.4 25 q1.4 16 .8 34" stroke="#ffffff" stroke-width="1" fill="none" stroke-linecap="round" opacity=".5"/>
-<rect x="30" y="13.6" width="9" height="5.6" rx="1.6" fill="url(#waCap)"/>
-<path d="M30.8 15 h7.4 M30.8 16.6 h7.4 M30.8 18.2 h7.4" stroke="rgba(60,80,92,.5)" stroke-width=".6"/>
-<circle cx="33" cy="44" r="1" fill="rgba(255,255,255,.85)"/>
-<circle cx="37" cy="51" r=".7" fill="rgba(255,255,255,.7)"/>
-<circle cx="34" cy="56" r=".8" fill="rgba(255,255,255,.75)"/>
+<path d="M28.4 27 q6.1 2 12.2 0 v36.6 q0 5.4 -6.1 5.4 t-6.1 -5.4 z" fill="url(#waW)"/>
+<ellipse cx="34.5" cy="27.2" rx="6.1" ry="1.6" fill="rgba(230,247,253,.85)"/>
+<rect x="27.5" y="36" width="14" height="17" rx="1.6" fill="url(#waLab)" stroke="#c9a85e" stroke-width=".6"/>
+<path d="M27.5 47 q3.5 -3.6 7 -1.4 q3.7 -3 7 .2 v4.6 q0 1.2 -1.6 1.2 h-10.8 q-1.6 0 -1.6 -1.2z" fill="url(#waHill)"/>
+<path d="M29.5 39 h10 M30.6 41.4 h7.8" stroke="#b3251a" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M31 43.8 h7" stroke="#8a6a35" stroke-width=".8" stroke-linecap="round" opacity=".8"/>
+<circle cx="34.5" cy="49.6" r="1.2" fill="#fdf9ee" opacity=".9"/>
+<path d="M30.6 20 q-1.8 22 -1.2 47" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".95"/>
+<path d="M39 22 q1.2 20 .8 44" stroke="#ffffff" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".5"/>
+<circle cx="33" cy="59" r=".9" fill="rgba(255,255,255,.8)"/>
+<circle cx="36.5" cy="64" r=".7" fill="rgba(255,255,255,.7)"/>
 </g>
-<g transform="translate(13 3) scale(.96)">
-<ellipse cx="34.5" cy="68" rx="8.2" ry="2.6" fill="rgba(255,255,255,.18)"/>
-<path d="M31 19 h7 l2.5 8 q1.5 4 1.5 9 v28 q0 6 -7.5 6 t-7.5 -6 v-28 q0 -5 1.5 -9 z"
+<g transform="translate(12 2.4) scale(.97)">
+<ellipse cx="34.5" cy="70" rx="7.4" ry="2.2" fill="rgba(255,255,255,.16)"/>
+<rect x="31.4" y="10.5" width="6.2" height="6" rx="1.2" fill="url(#waCap)"/>
+<rect x="31.4" y="15.4" width="6.2" height="1.4" fill="#7c0e07"/>
+<path d="M32.2 16.8 h4.6 c.3 3 1.6 4.6 2.6 6.4 q1.5 2.6 1.5 6 v34.4 q0 6.4 -6.4 6.4 t-6.4 -6.4 v-34.4 q0 -3.4 1.5 -6 c1 -1.8 2.3 -3.4 2.6 -6.4z"
   fill="url(#waGl)" stroke="rgba(255,255,255,.55)" stroke-width=".9"/>
-<path d="M27.6 33 q6.9 2.6 13.8 0 v23 q0 5 -6.9 5 t-6.9 -5 z" fill="url(#waW)"/>
-<ellipse cx="34.5" cy="33.4" rx="6.9" ry="1.9" fill="rgba(225,245,252,.85)"/>
-<ellipse cx="34.5" cy="61" rx="5.4" ry="1.6" fill="rgba(255,255,255,.3)"/>
-<path d="M30 23 q-1.6 18 -1 38" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".95"/>
-<path d="M39.4 25 q1.4 16 .8 34" stroke="#ffffff" stroke-width="1" fill="none" stroke-linecap="round" opacity=".5"/>
-<rect x="30" y="13.6" width="9" height="5.6" rx="1.6" fill="url(#waCap)"/>
-<path d="M30.8 15 h7.4 M30.8 16.6 h7.4 M30.8 18.2 h7.4" stroke="rgba(60,80,92,.5)" stroke-width=".6"/>
-<circle cx="33" cy="46" r=".9" fill="rgba(255,255,255,.8)"/>
-<circle cx="36.5" cy="53" r=".7" fill="rgba(255,255,255,.7)"/>
+<path d="M28.4 27 q6.1 2 12.2 0 v36.6 q0 5.4 -6.1 5.4 t-6.1 -5.4 z" fill="url(#waW)"/>
+<ellipse cx="34.5" cy="27.2" rx="6.1" ry="1.6" fill="rgba(230,247,253,.85)"/>
+<rect x="27.5" y="36" width="14" height="17" rx="1.6" fill="url(#waLab)" stroke="#c9a85e" stroke-width=".6"/>
+<path d="M27.5 47 q3.5 -3.6 7 -1.4 q3.7 -3 7 .2 v4.6 q0 1.2 -1.6 1.2 h-10.8 q-1.6 0 -1.6 -1.2z" fill="url(#waHill)"/>
+<path d="M29.5 39 h10 M30.6 41.4 h7.8" stroke="#b3251a" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M31 43.8 h7" stroke="#8a6a35" stroke-width=".8" stroke-linecap="round" opacity=".8"/>
+<circle cx="34.5" cy="49.6" r="1.2" fill="#fdf9ee" opacity=".9"/>
+<path d="M30.6 20 q-1.8 22 -1.2 47" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".95"/>
+<circle cx="33" cy="60" r=".8" fill="rgba(255,255,255,.75)"/>
 </g>
 `),
 
@@ -349,15 +414,23 @@ softboiled: wrap(`
 ${G("sbE",S(0,"#ffffff")+S(.6,"#f6efe2")+S(1,"#dccfb6"))}
 ${G("sbY",S(0,"#ffd964")+S(.45,"#ffb127")+S(1,"#e88a0e"),"radial",'cx="42%" cy="38%" r="70%"')}
 ${G("sbC",S(0,"#9c6a3d")+S(1,"#6e4426"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("sbS",S(0,"#f2f5f7")+S(.45,"#c3ccd2")+S(1,"#8d9aa3"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
 </defs>
 ${shadow}
-<path d="M24 48 q16 7 32 0 l-3 16 q-2 7 -13 7 t-13 -7 z" fill="url(#sbC)"/>
-<path d="M24 48 q16 7 32 0 l-1 5.5 q-15 6.5 -30 0 z" fill="rgba(0,0,0,.15)"/>
-<path d="M26 38 a14 17 0 0 1 28 0 q0 9 -4 12 q-10 5 -20 0 q-4 -3 -4 -12z" fill="url(#sbE)"/>
-<path d="M27.5 33 l4 3.5 4.5 -3.8 4 3.8 4.5 -3.8 4 3.8 4 -3.4 a14 16 0 0 0 -25 -.1z" fill="#fffdf8"/>
-<ellipse cx="40" cy="31" rx="9.5" ry="5.6" fill="url(#sbY)"/>
-<ellipse cx="37" cy="29.4" rx="3" ry="1.6" fill="#ffe9a3" opacity=".9"/>
-<path d="M46 31.5 q2 3 1 6" stroke="#e88a0e" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".85"/>
+<ellipse cx="40" cy="59" rx="19" ry="4.6" fill="url(#sbC)"/>
+<path d="M21 59 q19 8 38 0 l-1.2 4 q-2.5 5 -17.8 5 t-17.8 -5 z" fill="url(#sbC)"/>
+<path d="M24 59.5 q16 5.5 32 0 l-.8 2.6 q-15 5 -30.4 0 z" fill="rgba(0,0,0,.15)"/>
+<path d="M26 41 a14 17 0 0 1 28 0 q0 11 -4 15 q-10 5 -20 0 q-4 -4 -4 -15z" fill="url(#sbE)"/>
+<path d="M27.5 36 l4 3.5 4.5 -3.8 4 3.8 4.5 -3.8 4 3.8 4 -3.4 a14 16 0 0 0 -25 -.1z" fill="#fffdf8"/>
+<ellipse cx="40" cy="34" rx="9.5" ry="5.6" fill="url(#sbY)"/>
+<ellipse cx="37" cy="32.4" rx="3" ry="1.6" fill="#ffe9a3" opacity=".9"/>
+<path d="M46 34.5 q2 3 1 6" stroke="#e88a0e" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".85"/>
+<g transform="rotate(24 52 39)">
+<path d="M52 39 q-1 -10 -1.4 -20" stroke="url(#sbS)" stroke-width="3" stroke-linecap="round" fill="none"/>
+<ellipse cx="52.4" cy="43.5" rx="4.4" ry="6" fill="url(#sbS)"/>
+<ellipse cx="51.2" cy="41.6" rx="1.6" ry="2.4" fill="#ffffff" opacity=".75"/>
+<path d="M50.2 16.5 q.4 -1.6 1.6 -1.4 q1.2 .2 1 1.8" stroke="url(#sbS)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+</g>
 `),
 
 scrambled: wrap(`
@@ -660,7 +733,7 @@ ${shadow}
 const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const rows = [
   { time:"8 AM", label:"first water",
-    items: days.map(()=>({art:"water", name:"2 Acqua Panna 1L", price:"2L total"})) },
+    items: days.map(()=>({art:"water", name:"2 Acqua Panna 1L", price:"$6.00"})) },
   { time:"8:30", label:"morning supplements",
     items: days.map((d,i)=>({
       lines:[
@@ -715,7 +788,7 @@ const rows = [
       {art:"zucchini", name:"Zucchini", price:"$1.29"},
     ]},
   { time:"9 PM", label:"moon egg",
-    items: days.map(()=>({art:"softboiled", name:"4 Soft-Boiled Eggs", price:"$2.00", note:"salt + parsley"})) },
+    items: days.map(()=>({art:"softboiled", name:"4 Soft-Boiled", price:"$2.00", note:"salt + parsley"})) },
 ];
 
 const grid = document.getElementById("grid");
@@ -727,6 +800,10 @@ days.forEach((d,i)=>{
   h.textContent = d;
   grid.appendChild(h);
 });
+const th = document.createElement("div");
+th.className = "totalhead";
+th.textContent = "Total";
+grid.appendChild(th);
 
 const now = new Date();
 const hrDec = now.getHours() + now.getMinutes()/60;
@@ -736,6 +813,9 @@ for(let i=0;i<slotHours.length;i++){
   if(hrDec >= slotHours[i] && (i===slotHours.length-1 || hrDec < slotHours[i+1])) nowRow = i;
 }
 
+const money = s => parseFloat(String(s).replace(/[^0-9.]/g,"")) || 0;
+let grandWeekly = 0;
+
 rows.forEach((row,r)=>{
   const dimmed = r < 2; // 8 AM water + 8:30 supplements fade back, meals stay in focus
   const t = document.createElement("div");
@@ -743,23 +823,43 @@ rows.forEach((row,r)=>{
   t.innerHTML = `<div class="t">${row.time}</div><div class="label">${row.label}</div>`;
   grid.appendChild(t);
 
+  let rowTotal = 0;
+
   row.items.forEach((it,c)=>{
     const cell = document.createElement("div");
     const isList = !!it.lines;
-    cell.className = "cell" + (isList ? " list":"") + (dimmed ? " dim":"") + (r===nowRow && c===todayIdx ? " now":"");
+    // rice noodles ride along on Mon, Wed, Fri, Sun for every meal row
+    const noodles = !isList && r >= 2 && [0,2,4,6].includes(c);
+    if(isList){ it.lines.forEach(ln => rowTotal += money(ln.price)); }
+    else { rowTotal += money(it.price); if(noodles) rowTotal += 3.50; }
+    cell.className = "cell" + (isList ? " list":"") + (noodles ? " duo":"") + (dimmed ? " dim":"") + (r===nowRow && c===todayIdx ? " now":"");
     if(isList){
       cell.innerHTML = it.lines.map(ln =>
         `<div class="line"><span class="micon">${ART[ln.art]}</span><span class="lname">${ln.text}${ln.price ? `<span class="price">${ln.price}</span>`:""}</span></div>`
       ).join("");
       cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ` + it.lines.map(l=>l.text).join(", ");
     } else {
+      const iconHtml = noodles
+        ? `<div class="iconrow"><div class="icon">${ART[it.art]}</div><div class="icon">${ART.ricenoodles}</div></div>`
+        : `<div class="icon">${ART[it.art]}</div>`;
+      const extraHtml = noodles ? `<div class="name extra">Rice Noodles<span class="price">$3.50</span></div>` : "";
       const noteHtml = it.note ? `<div class="note">${it.note}</div>` : "";
-      cell.innerHTML = `<div class="icon">${ART[it.art]}</div><div class="name">${it.name}<span class="price">${it.price}</span></div>${noteHtml}`;
-      cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ${it.name} \u00b7 ${it.price}` + (it.note ? ` \u00b7 ${it.note}` : "");
+      cell.innerHTML = `${iconHtml}<div class="name">${it.name}<span class="price">${it.price}</span></div>${extraHtml}${noteHtml}`;
+      cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ${it.name} \u00b7 ${it.price}` + (noodles ? ` \u00b7 Rice Noodles $3.50` : "") + (it.note ? ` \u00b7 ${it.note}` : "");
     }
     grid.appendChild(cell);
   });
+
+  grandWeekly += rowTotal;
+  const tc = document.createElement("div");
+  tc.className = "totalcell" + (dimmed ? " dim":"");
+  tc.innerHTML = `<div class="wk">$${rowTotal.toFixed(2)}/w</div><div class="mo">$${(rowTotal*4).toFixed(2)}/m</div>`;
+  tc.title = `${row.time} \u00b7 weekly $${rowTotal.toFixed(2)} \u00b7 monthly $${(rowTotal*4).toFixed(2)}`;
+  grid.appendChild(tc);
 });
+
+document.getElementById("grandtotal").innerHTML =
+  `grocery budget <b>$${grandWeekly.toFixed(2)}</b>/w \u00b7 <b>$${(grandWeekly*4).toFixed(2)}</b>/m`;
 
 const leafChars = ["\u{1F343}","\u{1F33F}","\u{1F342}"];
 for(let i=0;i<10;i++){
