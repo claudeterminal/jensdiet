@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rainforest Meal Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --jungle-deep:#0c241a;
+    --jungle:#123226;
+    --canopy:#1c4534;
+    --moss:#2f6b4a;
+    --fern:#5fa977;
+    --mist:#bfe3c8;
+    --bamboo:#f0e6c4;
+    --tiki-wood:#6e4426;
+    --sun:#e8b84b;
+    --glow:rgba(232,184,75,.45);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    font-family:'Karla',sans-serif;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(95,169,119,.25), transparent 60%),
+      radial-gradient(900px 500px at 10% 110%, rgba(47,107,74,.35), transparent 60%),
+      radial-gradient(900px 500px at 95% 100%, rgba(28,69,52,.5), transparent 55%),
+      linear-gradient(180deg, var(--jungle-deep) 0%, var(--jungle) 45%, #0e2b20 100%);
+    color:var(--bamboo);
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* drifting canopy leaves */
+  .leaf{
+    position:fixed;
+    font-size:26px;
+    opacity:.18;
+    pointer-events:none;
+    animation:drift linear infinite;
+    z-index:0;
+    filter:blur(.3px);
+  }
+  @keyframes drift{
+    0%{transform:translateY(-8vh) translateX(0) rotate(0deg);}
+    100%{transform:translateY(112vh) translateX(8vw) rotate(340deg);}
+  }
+  /* slow mist band */
+  .mist{
+    position:fixed;left:-20%;width:140%;height:22vh;
+    background:linear-gradient(90deg,transparent,rgba(191,227,200,.07),rgba(191,227,200,.12),rgba(191,227,200,.07),transparent);
+    filter:blur(18px);
+    animation:mistmove 38s ease-in-out infinite alternate;
+    pointer-events:none;z-index:0;
+  }
+  .mist.m1{top:18%;}
+  .mist.m2{top:62%;animation-duration:52s;animation-delay:-14s;}
+  @keyframes mistmove{from{transform:translateX(-6%);}to{transform:translateX(6%);}}
+
+  .frame{
+    position:relative;z-index:1;
+    height:100vh;
+    display:flex;flex-direction:column;
+    padding:clamp(10px,1.6vh,22px) clamp(14px,2vw,30px);
+    gap:clamp(6px,1vh,14px);
+  }
+
+  header{
+    display:flex;align-items:baseline;justify-content:space-between;
+    flex:0 0 auto;
+  }
+  h1{
+    font-family:'Marcellus',serif;
+    font-weight:400;
+    font-size:clamp(20px,3.2vh,34px);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--bamboo);
+  }
+  h1 .tiki{color:var(--sun);}
+  .sub{
+    font-size:clamp(10px,1.4vh,13px);
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--mist);
+    opacity:.7;
+  }
+
+  /* the grid fills everything that remains */
+  .grid{
+    flex:1 1 auto;
+    display:grid;
+    grid-template-columns:minmax(64px,.55fr) repeat(7,1fr);
+    grid-template-rows:auto repeat(6,1fr);
+    gap:clamp(4px,.7vh,9px);
+    min-height:0;
+  }
+
+  .dayhead{
+    font-family:'Marcellus',serif;
+    text-align:center;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    font-size:clamp(11px,1.7vh,16px);
+    color:var(--mist);
+    padding:clamp(4px,.8vh,10px) 0;
+    border-bottom:1px solid rgba(191,227,200,.18);
+    align-self:end;
+  }
+  .dayhead.today{
+    color:var(--sun);
+    border-bottom-color:var(--sun);
+    text-shadow:0 0 14px var(--glow);
+  }
+
+  .timecell{
+    display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+    padding-right:clamp(8px,1vw,16px);
+    border-right:2px solid rgba(110,68,38,.8);
+  }
+  .timecell .t{
+    font-family:'Marcellus',serif;
+    font-size:clamp(13px,2.1vh,20px);
+    color:var(--bamboo);
+  }
+  .timecell .label{
+    font-size:clamp(8px,1.1vh,11px);
+    letter-spacing:.2em;text-transform:uppercase;
+    color:var(--fern);
+  }
+
+  .cell{
+    position:relative;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:clamp(2px,.5vh,6px);
+    background:linear-gradient(165deg, rgba(47,107,74,.32), rgba(18,50,38,.55));
+    border:1px solid rgba(95,169,119,.28);
+    border-radius:clamp(10px,1.4vh,16px);
+    min-height:0;min-width:0;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+    overflow:hidden;
+  }
+  .cell::before{ /* bamboo notch corners */
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:
+      radial-gradient(circle at 0 0, rgba(240,230,196,.10) 0 6px, transparent 7px),
+      radial-gradient(circle at 100% 0, rgba(240,230,196,.10) 0 6px, transparent 7px),
+      radial-gradient(circle at 0 100%, rgba(240,230,196,.10) 0 6px, transparent 7px),
+      radial-gradient(circle at 100% 100%, rgba(240,230,196,.10) 0 6px, transparent 7px);
+    pointer-events:none;
+  }
+  .cell:hover{
+    transform:translateY(-3px) scale(1.02);
+    border-color:var(--fern);
+    background:linear-gradient(165deg, rgba(95,169,119,.4), rgba(28,69,52,.7));
+    box-shadow:0 10px 26px rgba(0,0,0,.45), 0 0 18px rgba(95,169,119,.25);
+  }
+  .cell .icon{
+    font-size:clamp(18px,3.4vh,34px);
+    line-height:1;
+    animation:bob 4.5s ease-in-out infinite;
+    filter:drop-shadow(0 3px 6px rgba(0,0,0,.4));
+  }
+  .grid .cell:nth-child(odd) .icon{animation-delay:-2.2s;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-4px) rotate(2deg);}}
+  .cell .name{
+    font-size:clamp(8px,1.2vh,12px);
+    letter-spacing:.06em;
+    color:var(--mist);
+    text-align:center;
+    padding:0 4px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+  }
+
+  .cell.now{
+    border:2px solid var(--sun);
+    box-shadow:0 0 0 3px rgba(232,184,75,.18), 0 0 24px var(--glow);
+  }
+  .cell.now::after{
+    content:"now";
+    position:absolute;top:5px;right:7px;
+    font-size:clamp(7px,1vh,10px);
+    letter-spacing:.2em;text-transform:uppercase;
+    color:var(--sun);
+  }
+
+  footer{
+    flex:0 0 auto;
+    display:flex;justify-content:center;gap:clamp(16px,3vw,42px);
+    font-size:clamp(9px,1.3vh,12px);
+    letter-spacing:.24em;text-transform:uppercase;
+    color:rgba(191,227,200,.55);
+  }
+  footer span b{color:var(--sun);font-weight:700;}
+
+  @media (prefers-reduced-motion: reduce){
+    .leaf,.mist,.cell .icon{animation:none;}
+  }
+  @media (max-width:720px){
+    body{overflow:auto;}
+    .frame{height:auto;min-height:100vh;}
+    .grid{grid-template-rows:auto repeat(6,minmax(64px,1fr));}
+    .cell .name{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mist m1"></div>
+<div class="mist m2"></div>
+
+<div class="frame">
+  <header>
+    <h1><span class="tiki">🗿</span> Rainforest Table</h1>
+    <div class="sub">peaceful eating · one week beneath the canopy</div>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>
+    <span>🌿 eat slow</span>
+    <span>🍵 sip first</span>
+    <span><b>breathe</b> between bites</span>
+  </footer>
+</div>
+
+<script>
+const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const rows = [
+  { time:"8 AM", label:"morning sip",
+    items: days.map(()=>({icon:"🍵", name:"Matcha"})) },
+  { time:"9 AM", label:"egg ritual",
+    items: [
+      {icon:"🥚", name:"Soft-Boiled"},
+      {icon:"🍳", name:"Scrambled"},
+      {icon:"🌞", name:"Sunny Side Up"},
+      {icon:"🥣", name:"Poached"},
+      {icon:"🥚", name:"Soft-Boiled"},
+      {icon:"🍳", name:"Scrambled"},
+      {icon:"🌞", name:"Sunny Side Up"},
+    ]},
+  { time:"12 PM", label:"canopy greens",
+    items: [
+      {icon:"🥬", name:"Baby Kale"},
+      {icon:"🌿", name:"Arugula"},
+      {icon:"🌱", name:"Baby Arugula"},
+      {icon:"🪴", name:"Micro Greens"},
+      {icon:"🥗", name:"Lettuce"},
+      {icon:"🍃", name:"Collard Greens"},
+      {icon:"🥬", name:"Bok Choy"},
+    ]},
+  { time:"3 PM", label:"forest snack",
+    items: [
+      {icon:"🍎", name:"Apple"},
+      {icon:"🥜", name:"Peanuts"},
+      {icon:"🥛", name:"Milk"},
+      {icon:"🥕", name:"Carrot"},
+      {icon:"🍎", name:"Apple"},
+      {icon:"🥜", name:"Peanuts"},
+      {icon:"🥛", name:"Milk"},
+    ]},
+  { time:"6 PM", label:"roots & vines",
+    items: [
+      {icon:"🥕", name:"Colored Carrots"},
+      {icon:"🥔", name:"Potatoes"},
+      {icon:"🫛", name:"Edamame"},
+      {icon:"🟢", name:"Peas"},
+      {icon:"🍠", name:"Sweet Potatoes"},
+      {icon:"🫑", name:"Bell Peppers"},
+      {icon:"🥒", name:"Zucchini"},
+    ]},
+  { time:"9 PM", label:"moon egg",
+    items: days.map(()=>({icon:"🥚", name:"Egg"})) },
+];
+
+const grid = document.getElementById("grid");
+
+// header row
+grid.appendChild(document.createElement("div")); // empty corner
+const todayIdx = (new Date().getDay() + 6) % 7;  // Mon = 0
+days.forEach((d,i)=>{
+  const h = document.createElement("div");
+  h.className = "dayhead" + (i===todayIdx ? " today":"");
+  h.textContent = d;
+  grid.appendChild(h);
+});
+
+// figure out which time row is "now"
+const hr = new Date().getHours();
+const slotHours = [8,9,12,15,18,21];
+let nowRow = -1;
+for(let i=0;i<slotHours.length;i++){
+  if(hr >= slotHours[i] && (i===slotHours.length-1 || hr < slotHours[i+1])) nowRow = i;
+}
+
+rows.forEach((row,r)=>{
+  const t = document.createElement("div");
+  t.className = "timecell";
+  t.innerHTML = `<div class="t">${row.time}</div><div class="label">${row.label}</div>`;
+  grid.appendChild(t);
+
+  row.items.forEach((it,c)=>{
+    const cell = document.createElement("div");
+    cell.className = "cell" + (r===nowRow && c===todayIdx ? " now":"");
+    cell.innerHTML = `<div class="icon">${it.icon}</div><div class="name">${it.name}</div>`;
+    cell.title = `${days[c]} · ${row.time} · ${it.name}`;
+    grid.appendChild(cell);
+  });
+});
+
+// drifting leaves
+const leafChars = ["🍃","🌿","🍂"];
+for(let i=0;i<10;i++){
+  const l = document.createElement("div");
+  l.className = "leaf";
+  l.textContent = leafChars[i % leafChars.length];
+  l.style.left = (Math.random()*100) + "vw";
+  l.style.animationDuration = (22 + Math.random()*26) + "s";
+  l.style.animationDelay = (-Math.random()*30) + "s";
+  l.style.fontSize = (16 + Math.random()*18) + "px";
+  document.body.appendChild(l);
+}
+</script>
+</body>
+</html>
