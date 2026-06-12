@@ -72,7 +72,7 @@
   .grid{
     flex:1 1 auto;display:grid;
     grid-template-columns:minmax(64px,.55fr) repeat(7,1fr);
-    grid-template-rows:auto repeat(6,1fr);
+    grid-template-rows:auto repeat(7,1fr);
     gap:clamp(4px,.7vh,9px);
     min-height:0;
   }
@@ -130,9 +130,20 @@
   .grid .cell:nth-child(odd) .icon{animation-delay:-2.2s;}
   @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-4px) rotate(2deg);}}
   .cell .name{
-    font-size:clamp(8px,1.2vh,12px);letter-spacing:.06em;color:var(--mist);
+    font-size:clamp(10px,1.6vh,15px);letter-spacing:.05em;color:var(--bamboo);
+    font-weight:500;
     text-align:center;padding:0 4px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+  }
+  .cell .name .price{
+    color:rgba(125,255,158,.45);font-weight:400;margin-left:5px;
+    font-size:.82em;text-shadow:none;
+  }
+  .cell .note{
+    font-size:clamp(8px,1.1vh,11px);letter-spacing:.04em;
+    color:rgba(191,227,200,.55);text-align:center;padding:0 4px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;
+    margin-top:-2px;
   }
   .cell.now{
     border:2px solid var(--sun);
@@ -141,6 +152,20 @@
   .cell.now::after{
     content:"now";position:absolute;top:5px;right:7px;
     font-size:clamp(7px,1vh,10px);letter-spacing:.2em;text-transform:uppercase;color:var(--sun);
+  }
+  .dim{opacity:.6;transition:opacity .25s ease;}
+  .cell.dim:hover{opacity:1;}
+  /* stacked list cells (supplements) */
+  .cell.list{align-items:flex-start;justify-content:center;padding:clamp(4px,.8vh,10px) clamp(8px,1vw,14px);gap:clamp(1px,.4vh,5px);}
+  .cell.list .line{display:flex;align-items:center;gap:clamp(4px,.6vw,8px);max-width:100%;min-width:0;}
+  .cell.list .micon{
+    flex:0 0 auto;width:clamp(14px,2.4vh,22px);height:clamp(14px,2.4vh,22px);
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));
+  }
+  .cell.list .micon svg{width:100%;height:100%;display:block;}
+  .cell.list .lname{
+    font-size:clamp(10px,1.6vh,15px);letter-spacing:.05em;color:var(--bamboo);font-weight:500;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
 
   footer{
@@ -154,7 +179,7 @@
   @media (max-width:720px){
     body{overflow:auto;}
     .frame{height:auto;min-height:100vh;}
-    .grid{grid-template-rows:auto repeat(6,minmax(64px,1fr));}
+    .grid{grid-template-rows:auto repeat(7,minmax(64px,1fr));}
     .cell .name{display:none;}
   }
 </style>
@@ -167,7 +192,7 @@
 <div class="frame">
   <header>
     <h1><span class="tiki">&#x1F5FF;</span> Rainforest Table</h1>
-    <div class="sub">peaceful eating &middot; one week beneath the canopy</div>
+    <div class="sub">appetizing &bull; cookable &bull; gut friendly</div>
   </header>
 
   <div class="grid" id="grid"></div>
@@ -190,6 +215,119 @@ const shadow = `<ellipse cx="40" cy="71" rx="22" ry="4.5" fill="rgba(0,0,0,.38)"
 const wrap = inner => `<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 
 const ART = {
+
+capWhite: wrap(`
+<defs>${G("cpW",S(0,"#ffffff")+S(.6,"#efe9da")+S(1,"#cbc0a8"),"linear",'x1="0" y1="0" x2="1" y2="1"')}</defs>
+<g transform="rotate(-28 40 40)">
+<rect x="16" y="31" width="48" height="18" rx="9" fill="url(#cpW)" stroke="rgba(0,0,0,.12)" stroke-width="1"/>
+<path d="M40 31 v18" stroke="rgba(0,0,0,.14)" stroke-width="1.2"/>
+<path d="M22 35 q9 -2 16 -1" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity=".9" fill="none"/>
+</g>
+`),
+
+capTeal: wrap(`
+<defs>
+${G("cpT1",S(0,"#9fe6df")+S(1,"#3e9e94"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
+${G("cpT2",S(0,"#f2f5f0")+S(1,"#c5cdc2"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
+</defs>
+<g transform="rotate(-28 40 40)">
+<path d="M25 31 h15 v18 h-15 a9 9 0 0 1 0 -18z" fill="url(#cpT1)"/>
+<path d="M40 31 h15 a9 9 0 0 1 0 18 h-15z" fill="url(#cpT2)"/>
+<path d="M22 35 q9 -2 16 -1" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity=".85" fill="none"/>
+</g>
+`),
+
+capAmber: wrap(`
+<defs>
+${G("cpA1",S(0,"#ffd978")+S(1,"#d9930f"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
+${G("cpA2",S(0,"#ffefc4")+S(1,"#e8c264"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
+</defs>
+<g transform="rotate(-28 40 40)">
+<path d="M25 31 h15 v18 h-15 a9 9 0 0 1 0 -18z" fill="url(#cpA1)"/>
+<path d="M40 31 h15 a9 9 0 0 1 0 18 h-15z" fill="url(#cpA2)"/>
+<path d="M22 35 q9 -2 16 -1" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity=".85" fill="none"/>
+</g>
+`),
+
+water: wrap(`
+<defs>
+${G("waGl",S(0,"rgba(255,255,255,.34)")+S(.45,"rgba(220,240,250,.14)")+S(1,"rgba(160,200,220,.22)"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
+${G("waW",S(0,"rgba(190,228,245,.55)")+S(.6,"rgba(140,200,228,.7)")+S(1,"rgba(95,160,195,.8)"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("waCap",S(0,"#dfe9ee")+S(.5,"#aebfc9")+S(1,"#7e93a0"),"linear",'x1="0" y1="0" x2="1" y2="0"')}
+</defs>
+<ellipse cx="40" cy="72" rx="24" ry="4" fill="rgba(0,0,0,.38)"/>
+<g transform="translate(-9 0)">
+<ellipse cx="34.5" cy="68" rx="8.2" ry="2.6" fill="rgba(255,255,255,.18)"/>
+<path d="M31 19 h7 l2.5 8 q1.5 4 1.5 9 v28 q0 6 -7.5 6 t-7.5 -6 v-28 q0 -5 1.5 -9 z"
+  fill="url(#waGl)" stroke="rgba(255,255,255,.55)" stroke-width=".9"/>
+<path d="M27.6 33 q6.9 2.6 13.8 0 v23 q0 5 -6.9 5 t-6.9 -5 z" fill="url(#waW)"/>
+<ellipse cx="34.5" cy="33.4" rx="6.9" ry="1.9" fill="rgba(225,245,252,.85)"/>
+<ellipse cx="34.5" cy="61" rx="5.4" ry="1.6" fill="rgba(255,255,255,.3)"/>
+<path d="M30 23 q-1.6 18 -1 38" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".95"/>
+<path d="M39.4 25 q1.4 16 .8 34" stroke="#ffffff" stroke-width="1" fill="none" stroke-linecap="round" opacity=".5"/>
+<rect x="30" y="13.6" width="9" height="5.6" rx="1.6" fill="url(#waCap)"/>
+<path d="M30.8 15 h7.4 M30.8 16.6 h7.4 M30.8 18.2 h7.4" stroke="rgba(60,80,92,.5)" stroke-width=".6"/>
+<circle cx="33" cy="44" r="1" fill="rgba(255,255,255,.85)"/>
+<circle cx="37" cy="51" r=".7" fill="rgba(255,255,255,.7)"/>
+<circle cx="34" cy="56" r=".8" fill="rgba(255,255,255,.75)"/>
+</g>
+<g transform="translate(13 3) scale(.96)">
+<ellipse cx="34.5" cy="68" rx="8.2" ry="2.6" fill="rgba(255,255,255,.18)"/>
+<path d="M31 19 h7 l2.5 8 q1.5 4 1.5 9 v28 q0 6 -7.5 6 t-7.5 -6 v-28 q0 -5 1.5 -9 z"
+  fill="url(#waGl)" stroke="rgba(255,255,255,.55)" stroke-width=".9"/>
+<path d="M27.6 33 q6.9 2.6 13.8 0 v23 q0 5 -6.9 5 t-6.9 -5 z" fill="url(#waW)"/>
+<ellipse cx="34.5" cy="33.4" rx="6.9" ry="1.9" fill="rgba(225,245,252,.85)"/>
+<ellipse cx="34.5" cy="61" rx="5.4" ry="1.6" fill="rgba(255,255,255,.3)"/>
+<path d="M30 23 q-1.6 18 -1 38" stroke="#ffffff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".95"/>
+<path d="M39.4 25 q1.4 16 .8 34" stroke="#ffffff" stroke-width="1" fill="none" stroke-linecap="round" opacity=".5"/>
+<rect x="30" y="13.6" width="9" height="5.6" rx="1.6" fill="url(#waCap)"/>
+<path d="M30.8 15 h7.4 M30.8 16.6 h7.4 M30.8 18.2 h7.4" stroke="rgba(60,80,92,.5)" stroke-width=".6"/>
+<circle cx="33" cy="46" r=".9" fill="rgba(255,255,255,.8)"/>
+<circle cx="36.5" cy="53" r=".7" fill="rgba(255,255,255,.7)"/>
+</g>
+`),
+
+gingertea: wrap(`
+<defs>
+${G("gtA",S(0,"#ffd98a")+S(.55,"#e8a93f")+S(1,"#b3741a"))}
+${G("gtC",S(0,"#fffaf0")+S(1,"#d8c79e"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+</defs>
+${shadow}
+<path d="M17 36 q23 9 46 0 l-4.5 24 q-3.5 8 -18.5 8 t-18.5 -8 z" fill="url(#gtC)"/>
+<path d="M17 36 q23 9 46 0 l-1.4 7 q-21 8 -43.2 0 z" fill="rgba(0,0,0,.08)"/>
+<ellipse cx="40" cy="36" rx="23" ry="7.5" fill="#e6d8b2"/>
+<ellipse cx="40" cy="36" rx="19.5" ry="6" fill="url(#gtA)"/>
+<g transform="rotate(-12 46 35)">
+<ellipse cx="46" cy="35" rx="6" ry="3.4" fill="#f6e3a8"/>
+<ellipse cx="46" cy="35" rx="4.2" ry="2.2" fill="#ecd083"/>
+<path d="M42.5 34 q3.5 2.4 7 0" stroke="#c9a04e" stroke-width=".8" fill="none" opacity=".7"/>
+</g>
+<path d="M30 35.6 q5 2.8 10 1" stroke="#ffe9b8" stroke-width="1.4" fill="none" opacity=".85" stroke-linecap="round"/>
+<path d="M33 24 q3.5 -5 0 -10 M44 25 q-3.5 -5 0 -11" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".4"/>
+<path d="M24 56 q16 5 32 0" stroke="#fff" stroke-width="1.4" opacity=".35" fill="none"/>
+`),
+
+pepperminttea: wrap(`
+<defs>
+${G("ptA",S(0,"#c8efb6")+S(.55,"#8ecf7a")+S(1,"#579e4e"))}
+${G("ptC",S(0,"#fffaf0")+S(1,"#d8c79e"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("ptM",S(0,"#6fbf55")+S(1,"#2f7a32"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+</defs>
+${shadow}
+<path d="M17 36 q23 9 46 0 l-4.5 24 q-3.5 8 -18.5 8 t-18.5 -8 z" fill="url(#ptC)"/>
+<path d="M17 36 q23 9 46 0 l-1.4 7 q-21 8 -43.2 0 z" fill="rgba(0,0,0,.08)"/>
+<ellipse cx="40" cy="36" rx="23" ry="7.5" fill="#e6d8b2"/>
+<ellipse cx="40" cy="36" rx="19.5" ry="6" fill="url(#ptA)"/>
+<g transform="rotate(8 36 34)">
+<path d="M36 30 c3 0 5 2 5 4.6 c0 2.4 -2 4 -5 4 c-3 0 -5 -1.6 -5 -4 c0 -2.6 2 -4.6 5 -4.6z" fill="url(#ptM)"/>
+<path d="M36 31 q0 3.5 0 6.6 M36 33 q-2 .6 -3 2 M36 33 q2 .6 3 2" stroke="#dff4cc" stroke-width=".9" fill="none" stroke-linecap="round" opacity=".9"/>
+</g>
+<g transform="rotate(-14 47 36) scale(.8) translate(12 8)">
+<path d="M36 30 c3 0 5 2 5 4.6 c0 2.4 -2 4 -5 4 c-3 0 -5 -1.6 -5 -4 c0 -2.6 2 -4.6 5 -4.6z" fill="url(#ptM)"/>
+</g>
+<path d="M33 24 q3.5 -5 0 -10 M44 25 q-3.5 -5 0 -11" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".4"/>
+<path d="M24 56 q16 5 32 0" stroke="#fff" stroke-width="1.4" opacity=".35" fill="none"/>
+`),
 
 matcha: wrap(`
 <defs>
@@ -521,50 +659,63 @@ ${shadow}
 /* ---------- grid data ---------- */
 const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const rows = [
-  { time:"8 AM", label:"morning sip",
-    items: days.map(()=>({art:"matcha", name:"Matcha"})) },
+  { time:"8 AM", label:"first water",
+    items: days.map(()=>({art:"water", name:"2 Acqua Panna 1L", price:"2L total"})) },
+  { time:"8:30", label:"morning supplements",
+    items: days.map((d,i)=>({
+      lines:[
+        i % 2 === 0
+          ? {art:"gingertea", text:"Ginger Tea", price:"$0.50"}
+          : {art:"pepperminttea", text:"Peppermint Tea", price:"$0.50"},
+        {art:"capWhite", text:"L-Glutamine"},
+        {art:"capTeal", text:"Zinc Carnosine"},
+        {art:"capAmber", text:"Quercetin"},
+      ],
+      name: i % 2 === 0 ? "Ginger Tea" : "Peppermint Tea",
+      price:"$0.50",
+    })) },
   { time:"9 AM", label:"egg ritual",
     items: [
-      {art:"softboiled", name:"Soft-Boiled"},
-      {art:"scrambled", name:"Scrambled"},
-      {art:"sunny", name:"Sunny Side Up"},
-      {art:"poached", name:"Poached"},
-      {art:"softboiled", name:"Soft-Boiled"},
-      {art:"scrambled", name:"Scrambled"},
-      {art:"sunny", name:"Sunny Side Up"},
+      {art:"softboiled", name:"4 Soft-Boiled", price:"$2.00"},
+      {art:"scrambled", name:"4 Scrambled", price:"$2.00"},
+      {art:"sunny", name:"4 Sunny Side Up", price:"$2.00"},
+      {art:"poached", name:"4 Poached", price:"$2.00"},
+      {art:"softboiled", name:"4 Soft-Boiled", price:"$2.00"},
+      {art:"scrambled", name:"4 Scrambled", price:"$2.00"},
+      {art:"sunny", name:"4 Sunny Side Up", price:"$2.00"},
     ]},
   { time:"12 PM", label:"canopy greens",
     items: [
-      {art:"babykale", name:"Baby Kale"},
-      {art:"arugula", name:"Arugula"},
-      {art:"babyarugula", name:"Baby Arugula"},
-      {art:"micro", name:"Micro Greens"},
-      {art:"lettuce", name:"Lettuce"},
-      {art:"collard", name:"Collard Greens"},
-      {art:"bokchoy", name:"Bok Choy"},
+      {art:"babykale", name:"Baby Kale", price:"$3.49"},
+      {art:"arugula", name:"Arugula", price:"$2.99"},
+      {art:"babyarugula", name:"Baby Arugula", price:"$3.29"},
+      {art:"micro", name:"Micro Greens", price:"$3.99"},
+      {art:"lettuce", name:"Lettuce", price:"$1.99"},
+      {art:"collard", name:"Collard Greens", price:"$2.49"},
+      {art:"bokchoy", name:"Bok Choy", price:"$2.79"},
     ]},
   { time:"3 PM", label:"forest snack",
     items: [
-      {art:"apple", name:"Apple"},
-      {art:"peanuts", name:"Peanuts"},
-      {art:"milk", name:"Milk"},
-      {art:"carrot", name:"Carrot"},
-      {art:"apple", name:"Apple"},
-      {art:"peanuts", name:"Peanuts"},
-      {art:"milk", name:"Milk"},
+      {art:"apple", name:"Apple", price:"$0.75"},
+      {art:"peanuts", name:"Peanuts", price:"$1.25"},
+      {art:"milk", name:"Milk", price:"$0.99"},
+      {art:"carrot", name:"Carrot", price:"$0.50"},
+      {art:"apple", name:"Apple", price:"$0.75"},
+      {art:"peanuts", name:"Peanuts", price:"$1.25"},
+      {art:"milk", name:"Milk", price:"$0.99"},
     ]},
   { time:"6 PM", label:"roots & vines",
     items: [
-      {art:"coloredcarrots", name:"Colored Carrots"},
-      {art:"potatoes", name:"Potatoes"},
-      {art:"edamame", name:"Edamame"},
-      {art:"peas", name:"Peas"},
-      {art:"sweetpotato", name:"Sweet Potatoes"},
-      {art:"bellpeppers", name:"Bell Peppers"},
-      {art:"zucchini", name:"Zucchini"},
+      {art:"coloredcarrots", name:"Colored Carrots", price:"$3.99"},
+      {art:"potatoes", name:"Potatoes", price:"$2.49"},
+      {art:"edamame", name:"Edamame", price:"$2.99"},
+      {art:"peas", name:"Peas", price:"$1.99"},
+      {art:"sweetpotato", name:"Sweet Potatoes", price:"$1.79"},
+      {art:"bellpeppers", name:"Bell Peppers", price:"$1.50"},
+      {art:"zucchini", name:"Zucchini", price:"$1.29"},
     ]},
   { time:"9 PM", label:"moon egg",
-    items: days.map(()=>({art:"egg", name:"Egg"})) },
+    items: days.map(()=>({art:"softboiled", name:"4 Soft-Boiled Eggs", price:"$2.00", note:"salt + parsley"})) },
 ];
 
 const grid = document.getElementById("grid");
@@ -577,24 +728,35 @@ days.forEach((d,i)=>{
   grid.appendChild(h);
 });
 
-const hr = new Date().getHours();
-const slotHours = [8,9,12,15,18,21];
+const now = new Date();
+const hrDec = now.getHours() + now.getMinutes()/60;
+const slotHours = [8, 8.5, 9, 12, 15, 18, 21];
 let nowRow = -1;
 for(let i=0;i<slotHours.length;i++){
-  if(hr >= slotHours[i] && (i===slotHours.length-1 || hr < slotHours[i+1])) nowRow = i;
+  if(hrDec >= slotHours[i] && (i===slotHours.length-1 || hrDec < slotHours[i+1])) nowRow = i;
 }
 
 rows.forEach((row,r)=>{
+  const dimmed = r < 2; // 8 AM water + 8:30 supplements fade back, meals stay in focus
   const t = document.createElement("div");
-  t.className = "timecell";
+  t.className = "timecell" + (dimmed ? " dim":"");
   t.innerHTML = `<div class="t">${row.time}</div><div class="label">${row.label}</div>`;
   grid.appendChild(t);
 
   row.items.forEach((it,c)=>{
     const cell = document.createElement("div");
-    cell.className = "cell" + (r===nowRow && c===todayIdx ? " now":"");
-    cell.innerHTML = `<div class="icon">${ART[it.art]}</div><div class="name">${it.name}</div>`;
-    cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ${it.name}`;
+    const isList = !!it.lines;
+    cell.className = "cell" + (isList ? " list":"") + (dimmed ? " dim":"") + (r===nowRow && c===todayIdx ? " now":"");
+    if(isList){
+      cell.innerHTML = it.lines.map(ln =>
+        `<div class="line"><span class="micon">${ART[ln.art]}</span><span class="lname">${ln.text}${ln.price ? `<span class="price">${ln.price}</span>`:""}</span></div>`
+      ).join("");
+      cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ` + it.lines.map(l=>l.text).join(", ");
+    } else {
+      const noteHtml = it.note ? `<div class="note">${it.note}</div>` : "";
+      cell.innerHTML = `<div class="icon">${ART[it.art]}</div><div class="name">${it.name}<span class="price">${it.price}</span></div>${noteHtml}`;
+      cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ${it.name} \u00b7 ${it.price}` + (it.note ? ` \u00b7 ${it.note}` : "");
+    }
     grid.appendChild(cell);
   });
 });
