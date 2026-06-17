@@ -544,6 +544,26 @@ ${shadow}
 <path d="M40 33 q-7 5 -8 13 M40 33 q7 5 8 13 M40 33 q0 11 0 22" stroke="#8fbf63" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/>
 `),
 
+egglettucecup: wrap(`
+<defs>
+${G("elcO",S(0,"#9ccf6a")+S(.6,"#5f9e43")+S(1,"#3c7330"))}
+${G("elcI",S(0,"#eaf6c8")+S(1,"#b9dd8a"))}
+${G("elcA",S(0,"#ffe793")+S(.55,"#ffc94f")+S(1,"#ef9c20"))}
+</defs>
+${shadow}
+<path d="M16 40 c0 -10 11 -16 24 -16 c13 0 24 6 24 16 c0 12 -11 22 -24 22 c-13 0 -24 -10 -24 -22z" fill="url(#elcO)"/>
+<path d="M22 41 c0 -7 8 -12 18 -12 c10 0 18 5 18 12 c0 9 -8 16 -18 16 c-10 0 -18 -7 -18 -16z" fill="url(#elcI)"/>
+<path d="M18 36 q4 -6 10 -8 M62 36 q-4 -6 -10 -8 M40 24 q0 4 0 6" stroke="#2f5e27" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".55"/>
+<g>
+<ellipse cx="33" cy="42" rx="9" ry="6.5" fill="url(#elcA)"/>
+<ellipse cx="46" cy="40" rx="9.5" ry="6.8" fill="url(#elcA)"/>
+<ellipse cx="40" cy="36" rx="8" ry="6" fill="url(#elcA)"/>
+<ellipse cx="49" cy="45" rx="6.5" ry="4.8" fill="url(#elcA)"/>
+<ellipse cx="36" cy="34" rx="3" ry="1.7" fill="#fff3c2" opacity=".9"/>
+<ellipse cx="45" cy="38.5" rx="2.6" ry="1.5" fill="#fff3c2" opacity=".8"/>
+</g>
+`),
+
 collard: wrap(`
 <defs>${G("coL",S(0,"#4f8f44")+S(.55,"#2f6b34")+S(1,"#1d4a25"),"linear",'x1="0" y1="0" x2="0" y2="1"')}</defs>
 ${shadow}
@@ -780,11 +800,11 @@ const rows = [
   { time:"6 PM", label:"roots & vines",
     items: [
       {art:"coloredcarrots", name:"Colored Carrots", price:"$3.99"},
-      {art:"potatoes", name:"Potatoes", price:"$2.49"},
-      {art:"edamame", name:"Edamame", price:"$2.99"},
+      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
+      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
       {art:"peas", name:"Peas", price:"$1.99"},
       {art:"sweetpotato", name:"Sweet Potatoes", price:"$1.79"},
-      {art:"bellpeppers", name:"Bell Peppers", price:"$1.50"},
+      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
       {art:"zucchini", name:"Zucchini", price:"$1.29"},
     ]},
   { time:"9 PM", label:"moon egg",
