@@ -72,7 +72,7 @@
   .grid{
     flex:1 1 auto;display:grid;
     grid-template-columns:minmax(64px,.55fr) repeat(7,1fr) minmax(70px,.62fr);
-    grid-template-rows:auto repeat(7,1fr);
+    grid-template-rows:auto repeat(6,1fr);
     gap:clamp(4px,.7vh,9px);
     min-height:0;
   }
@@ -211,7 +211,7 @@
   @media (max-width:720px){
     body{overflow:auto;}
     .frame{height:auto;min-height:100vh;}
-    .grid{grid-template-rows:auto repeat(7,minmax(64px,1fr));}
+    .grid{grid-template-rows:auto repeat(6,minmax(64px,1fr));}
     .cell .name{display:none;}
   }
 </style>
@@ -769,47 +769,37 @@ const rows = [
       price:"$0.50",
     })) },
   { time:"9 AM", label:"egg ritual",
-    items: [
-      {art:"softboiled", name:"4 Soft-Boiled", price:"$2.00"},
-      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
-      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
-      {art:"poached", name:"4 Poached", price:"$2.00"},
-      {art:"softboiled", name:"4 Soft-Boiled", price:"$2.00"},
-      {art:"egglettucecup", name:"Egg Lettuce Cups", price:"$2.50"},
-      {art:"sunny", name:"4 Sunny Side Up", price:"$2.00"},
-    ]},
+    items: days.map(()=>({art:"egg", name:"1 Egg White", price:"$0.30", note:"33g"})) },
   { time:"12 PM", label:"canopy greens",
     items: [
-      {art:"babykale", name:"Baby Kale", price:"$3.49"},
-      {art:"arugula", name:"Arugula", price:"$2.99"},
-      {art:"babyarugula", name:"Baby Arugula", price:"$3.29"},
-      {art:"micro", name:"Micro Greens", price:"$3.99"},
-      {art:"lettuce", name:"Lettuce", price:"$1.99"},
-      {art:"collard", name:"Collard Greens", price:"$2.49"},
-      {art:"bokchoy", name:"Bok Choy", price:"$2.79"},
+      {art:"babykale", name:"Baby Kale", price:"$3.49", note:"85g"},
+      {art:"arugula", name:"Arugula", price:"$2.99", note:"85g"},
+      {art:"babyarugula", name:"Baby Arugula", price:"$3.29", note:"85g"},
+      {art:"micro", name:"Micro Greens", price:"$3.99", note:"50g"},
+      {art:"lettuce", name:"Lettuce", price:"$1.99", note:"100g"},
+      {art:"collard", name:"Collard Greens", price:"$2.49", note:"85g"},
+      {art:"bokchoy", name:"Bok Choy", price:"$2.79", note:"100g"},
     ]},
   { time:"3 PM", label:"forest snack",
     items: [
-      {art:"apple", name:"Apple", price:"$0.75"},
-      {art:"peanuts", name:"Peanuts", price:"$1.25"},
-      {art:"milk", name:"Milk", price:"$0.99"},
-      {art:"carrot", name:"Carrot", price:"$0.50"},
-      {art:"apple", name:"Apple", price:"$0.75"},
-      {art:"peanuts", name:"Peanuts", price:"$1.25"},
-      {art:"milk", name:"Milk", price:"$0.99"},
+      {art:"carrot", name:"Carrot", price:"$0.50", note:"60g"},
+      {art:"peanuts", name:"Peanuts", price:"$1.25", note:"28g"},
+      {art:"milk", name:"Milk", price:"$0.99", note:"240ml"},
+      {art:"carrot", name:"Carrot", price:"$0.50", note:"60g"},
+      {art:"carrot", name:"Carrot", price:"$0.50", note:"60g"},
+      {art:"peanuts", name:"Peanuts", price:"$1.25", note:"28g"},
+      {art:"milk", name:"Milk", price:"$0.99", note:"240ml"},
     ]},
   { time:"6 PM", label:"roots & vines",
     items: [
-      {art:"coloredcarrots", name:"Colored Carrots", price:"$3.99"},
-      {art:"potatoes", name:"Potatoes", price:"$2.49"},
-      {art:"edamame", name:"Edamame", price:"$2.99"},
-      {art:"peas", name:"Peas", price:"$1.99"},
-      {art:"sweetpotato", name:"Sweet Potatoes", price:"$1.79"},
-      {art:"bellpeppers", name:"Bell Peppers", price:"$1.50"},
-      {art:"zucchini", name:"Zucchini", price:"$1.29"},
+      {art:"coloredcarrots", name:"Colored Carrots", price:"$3.99", note:"150g"},
+      {art:"potatoes", name:"Potatoes", price:"$2.49", note:"150g"},
+      {art:"edamame", name:"Edamame", price:"$2.99", note:"90g"},
+      {art:"peas", name:"Peas", price:"$1.99", note:"100g"},
+      {art:"sweetpotato", name:"Sweet Potatoes", price:"$1.79", note:"150g"},
+      {art:"bellpeppers", name:"Bell Peppers", price:"$1.50", note:"120g"},
+      {art:"zucchini", name:"Zucchini", price:"$1.29", note:"150g"},
     ]},
-  { time:"9 PM", label:"moon egg",
-    items: days.map(()=>({art:"softboiled", name:"4 Soft-Boiled", price:"$2.00", note:"salt + parsley"})) },
 ];
 
 const grid = document.getElementById("grid");
@@ -863,7 +853,7 @@ rows.forEach((row,r)=>{
       const iconHtml = noodles
         ? `<div class="iconrow"><div class="icon">${ART[it.art]}</div><div class="icon">${ART.ricenoodles}</div></div>`
         : `<div class="icon">${ART[it.art]}</div>`;
-      const extraHtml = noodles ? `<div class="name extra">Rice Noodles<span class="price">$3.50</span></div>` : "";
+      const extraHtml = noodles ? `<div class="name extra">Rice Noodles &middot; 150g<span class="price">$3.50</span></div>` : "";
       const noteHtml = it.note ? `<div class="note">${it.note}</div>` : "";
       cell.innerHTML = `${iconHtml}<div class="name">${it.name}<span class="price">${it.price}</span></div>${extraHtml}${noteHtml}`;
       cell.title = `${days[c]} \u00b7 ${row.time} \u00b7 ${it.name} \u00b7 ${it.price}` + (noodles ? ` \u00b7 Rice Noodles $3.50` : "") + (it.note ? ` \u00b7 ${it.note}` : "");
