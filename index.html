@@ -742,6 +742,34 @@ ${shadow}
 </g>
 `),
 
+salmon: wrap(`
+<defs>
+${G("saF",S(0,"#ff9d7a")+S(.5,"#f4744c")+S(1,"#c94a2b"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("saS",S(0,"#e9eef0")+S(1,"#9fb0b6"),"linear",'x1="0" y1="0" x2="1" y2="1"')}
+</defs>
+${shadow}
+<path d="M16 44 c6 -13 22 -20 36 -20 c8 0 13 3 13 8 c0 10 -12 25 -30 25 c-12 0 -21 -5 -19 -13z" fill="url(#saF)"/>
+<g stroke="#ffd9c6" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85">
+<path d="M24 46 q10 -11 25 -15"/><path d="M28 53 q10 -11 25 -15"/><path d="M34 58 q9 -10 22 -14"/>
+</g>
+<path d="M52 24 c8 0 13 3 13 8 c0 3 -1 6 -3 9 c-4 -6 -7 -12 -10 -17z" fill="url(#saS)" opacity=".9"/>
+<path d="M20 42 q7 -12 22 -17" stroke="#fff1e7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".55"/>
+`),
+
+roastveg: wrap(`
+<defs>
+${G("rvP",S(0,"#f5d79a")+S(.55,"#d9a45f")+S(1,"#a3702c"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+${G("rvC",S(0,"#ffb45e")+S(1,"#c9560c"),"linear",'x1="0" y1="0" x2="0" y2="1"')}
+</defs>
+${shadow}
+<g transform="rotate(-16 30 50)"><path d="M22 40 l12 -4 l6 20 l-12 5z" fill="url(#rvP)"/><path d="M24 44 q6 -2 11 -3" stroke="#8a5a1d" stroke-width="1.4" fill="none" opacity=".55"/></g>
+<g transform="rotate(9 50 48)"><path d="M44 36 l12 -3 l5 21 l-13 4z" fill="url(#rvP)"/><path d="M46 41 q6 -2 11 -3" stroke="#8a5a1d" stroke-width="1.4" fill="none" opacity=".55"/></g>
+<g transform="rotate(-4 40 52)"><path d="M33 46 q4 -3 8 -1 q3 2 2 8 l-3 14 q-1 3 -3 0 l-4 -14 q-1 -5 0 -7z" fill="url(#rvC)"/></g>
+<g transform="rotate(22 56 56)"><path d="M50 48 q4 -3 8 -1 q3 2 2 7 l-3 12 q-1 3 -3 0 l-4 -12 q-1 -4 0 -6z" fill="url(#rvC)"/></g>
+<g fill="#6b4415" opacity=".5"><ellipse cx="31" cy="52" rx="1.6" ry="1"/><ellipse cx="52" cy="46" rx="1.5" ry="1"/></g>
+<g fill="#fffdf2" opacity=".8"><circle cx="27" cy="38" r="1"/><circle cx="46" cy="35" r=".9"/><circle cx="58" cy="52" r="1"/><circle cx="38" cy="62" r=".9"/></g>
+`),
+
 egg: wrap(`
 <defs>${G("egW",S(0,"#ffffff")+S(.55,"#f5efe2")+S(1,"#d4c7ad"),"radial",'cx="36%" cy="28%" r="80%"')}</defs>
 ${shadow}
@@ -770,16 +798,9 @@ const rows = [
     })) },
   { time:"9 AM", label:"egg ritual",
     items: days.map(()=>({art:"egg", name:"1 Egg White", price:"$0.30", note:"33g"})) },
-  { time:"12 PM", label:"canopy greens",
-    items: [
-      {art:"babykale", name:"Baby Kale", price:"$3.49", note:"85g"},
-      {art:"arugula", name:"Arugula", price:"$2.99", note:"85g"},
-      {art:"babyarugula", name:"Baby Arugula", price:"$3.29", note:"85g"},
-      {art:"micro", name:"Micro Greens", price:"$3.99", note:"50g"},
-      {art:"lettuce", name:"Lettuce", price:"$1.99", note:"100g"},
-      {art:"collard", name:"Collard Greens", price:"$2.49", note:"85g"},
-      {art:"bokchoy", name:"Bok Choy", price:"$2.79", note:"100g"},
-    ]},
+  { time:"12 PM", label:"air-fryer roast",
+    items: days.map(()=>({art:"roastveg", name:"Carrots + Potatoes", price:"$2.40",
+      note:"300g · olive oil + salt"})) },
   { time:"3 PM", label:"forest snack",
     items: [
       {art:"carrot", name:"Carrot", price:"$0.50", note:"60g"},
@@ -790,16 +811,8 @@ const rows = [
       {art:"peanuts", name:"Peanuts", price:"$1.25", note:"28g"},
       {art:"milk", name:"Milk", price:"$0.99", note:"240ml"},
     ]},
-  { time:"6 PM", label:"roots & vines",
-    items: [
-      {art:"coloredcarrots", name:"Colored Carrots", price:"$3.99", note:"150g"},
-      {art:"potatoes", name:"Potatoes", price:"$2.49", note:"150g"},
-      {art:"edamame", name:"Edamame", price:"$2.99", note:"90g"},
-      {art:"peas", name:"Peas", price:"$1.99", note:"100g"},
-      {art:"sweetpotato", name:"Sweet Potatoes", price:"$1.79", note:"150g"},
-      {art:"bellpeppers", name:"Bell Peppers", price:"$1.50", note:"120g"},
-      {art:"zucchini", name:"Zucchini", price:"$1.29", note:"150g"},
-    ]},
+  { time:"6 PM", label:"salmon",
+    items: days.map(()=>({art:"salmon", name:"Salmon", price:"$6.50", note:"140g"})) },
 ];
 
 const grid = document.getElementById("grid");
